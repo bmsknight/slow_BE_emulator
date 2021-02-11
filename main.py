@@ -6,11 +6,12 @@ from src.my_functions import get_latency_value, check_anomaly
 from src.window_type_updater import WindowTypeUpdater
 
 ANOMALY_SPLIT = 0.3
-LATENCY_MEAN = 1000
-LATENCY_STD = 100
+LATENCY_MEAN = 10000
+LATENCY_STD = 50
+WINDOW_TIME_SECONDS = 20
 
 app = Flask(__name__)
-updater = WindowTypeUpdater()
+updater = WindowTypeUpdater(WINDOW_TIME_SECONDS)
 updater.start()
 
 
@@ -99,6 +100,23 @@ def set_latency_distribution():
         return jsonify(resp='invalid value'), 400
     else:
         LATENCY_MEAN, LATENCY_STD = mean, std
+        return jsonify(resp='success')
+
+
+@app.route('/set-window-time', methods=['POST'])
+def set_window_time():
+    global WINDOW_TIME_SECONDS
+    content = request.get_json()
+    print(content)
+    try:
+        val = float(content['value'])
+    except KeyError:
+        return jsonify(resp='invalid keys'), 400
+    except TypeError:
+        return jsonify(resp='invalid value'), 400
+    else:
+        WINDOW_TIME_SECONDS = val
+        updater.window_time_second = WINDOW_TIME_SECONDS
         return jsonify(resp='success')
 
 

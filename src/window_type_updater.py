@@ -2,14 +2,14 @@ import threading
 import random
 import time
 
-WINDOW_TIME_SECOND = 20
-
 
 class WindowTypeUpdater:
-    def __init__(self):
+    def __init__(self,window_time_second):
         self.thread = None
         self.read_lock = threading.Lock()
         self.started = False
+
+        self.window_time_second = window_time_second
         self.p = 0
         self.t = time.time()
         self.w = WindowTypeUpdater.get_window_type()
@@ -23,7 +23,7 @@ class WindowTypeUpdater:
 
     def update(self):
         while self.started:
-            if time.time() >= self.t + WINDOW_TIME_SECOND:
+            if time.time() >= self.t + self.window_time_second:
                 print('updating')
                 with self.read_lock:
                     self.t = time.time()
@@ -33,7 +33,13 @@ class WindowTypeUpdater:
 
     @staticmethod
     def get_window_type():
-        return int(random.uniform(0, 3))
+        v = random.uniform(0, 1)
+        if v < 0.8:
+            return 0
+        elif v < 0.95:
+            return 1
+        else:
+            return 2
 
     @staticmethod
     def get_anomaly_percentage():
