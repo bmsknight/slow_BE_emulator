@@ -10,6 +10,8 @@ LATENCY_MEAN = 1000
 LATENCY_STD = 100
 
 app = Flask(__name__)
+updater = WindowTypeUpdater()
+updater.start()
 
 
 @app.route('/')
@@ -101,6 +103,4 @@ def set_latency_distribution():
 
 
 if __name__ == '__main__':
-    updater = WindowTypeUpdater()
-    updater.start()
     app.run(host='0.0.0.0', port=9090, threaded=True)
