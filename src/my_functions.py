@@ -1,4 +1,5 @@
 import random
+import math
 
 UNIFORM_DIST_MIN = 0
 UNIFORM_DIST_MAX = 1
@@ -14,3 +15,19 @@ def check_anomaly(split):
     if v < split:
         return True
     return False
+
+
+def compute_prime(num):
+    prime_list = []
+    for count in range(num+1):
+        isprime = True
+
+        for x in range(2, int(math.sqrt(count) + 1)):
+            if count % x == 0:
+                isprime = False
+                break
+
+        if isprime:
+            prime_list.append(count)
+
+    return prime_list

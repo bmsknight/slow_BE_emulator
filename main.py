@@ -2,7 +2,7 @@ import time
 
 from flask import Flask, request, jsonify
 
-from src.my_functions import get_latency_value, check_anomaly
+from src.my_functions import get_latency_value, check_anomaly, compute_prime
 from src.window_type_updater import WindowTypeUpdater
 
 ANOMALY_SPLIT = 0.3
@@ -67,6 +67,13 @@ def periodic_rand_anomaly_echo():
             content['anomaly_flag'] = True
         else:
             content['anomaly_flag'] = False
+    return jsonify(content)
+
+
+@app.route('/echo-with-process', methods=['POST'])
+def echo_with_process():
+    content = request.get_json()
+    v = compute_prime(500000)
     return jsonify(content)
 
 
